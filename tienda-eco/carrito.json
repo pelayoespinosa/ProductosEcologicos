@@ -1,0 +1,5 @@
+[
+    { "nombre": "Cesta de Verduras Ecológicas", "precio": 45.00, "cantidad": 1, "esFragil": false, "stockDisponible": 5 },
+    { "nombre": "Aceite de Oliva Virgen Extra", "precio": 28.50, "cantidad": 2, "esFragil": true, "stockDisponible": 10 },
+    { "nombre": "Miel Cruda Orgánica", "precio": 12.00, "cantidad": 1, "esFragil": true, "stockDisponible": 5 }
+]
