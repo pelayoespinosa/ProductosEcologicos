@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "dayjs": "^1.11.19",
+    "express": "^5.2.1",
     "file": "^0.2.2",
     "system": "^2.0.1"
   }

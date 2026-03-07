@@ -1,0 +1,4 @@
+[
+    { "nombre": "Saco de Patatas 5kg", "precio": 8.50, "cantidad": 1, "esFragil": false, "stockDisponible": 20 },
+    { "nombre": "Mermelada de Fresa Artesanal", "precio": 5.20, "cantidad": 3, "esFragil": true, "stockDisponible": 15 }
+]
