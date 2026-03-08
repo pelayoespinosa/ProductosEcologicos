@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Eco - Checkout</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="contenedor">
+        <h1>🌱 Finalizar Compra</h1>
+        
+        <form id="formulario-compra">
+            <label>Nombre del Cliente:</label>
+            <input type="text" id="nombre" required placeholder="Ej. Ana García">
+
+            <label>Correo Electrónico:</label>
+            <input type="email" id="email" required placeholder="ana@ejemplo.com">
+
+            <h3 style="color: #166534; margin-top: 25px;">Tu Carrito (Cantidades):</h3>
+            
+            <label>🥦 Cesta de Verduras (45.00€):</label>
+            <input type="number" id="cant-verduras" min="0" value="1">
+
+            <label>🫒 Aceite de Oliva Frágil (28.50€):</label>
+            <input type="number" id="cant-aceite" min="0" value="0">
+
+            <button type="submit">🛒 Pagar y Generar Factura</button>
+        </form>
+
+        <pre id="resultado"></pre>
+    </div>
+
+    <script>
+        // LA CONEXIÓN (FRONTEND -> BACKEND)
+        document.getElementById('formulario-compra').addEventListener('submit', async (evento) => {
+            evento.preventDefault(); // Evitamos que la página se recargue al enviar el formulario
+
+            // 1. Recopilamos la información que el usuario ha escrito
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const cantVerduras = parseInt(document.getElementById('cant-verduras').value);
+            const cantAceite = parseInt(document.getElementById('cant-aceite').value);
+
+            // 2. Construimos el array del carrito dinámicamente según lo elegido
+            const carrito = [];
+            if (cantVerduras > 0) carrito.push({ nombre: "Cesta de Verduras Ecológicas", precio: 45.00, cantidad: cantVerduras, esFragil: false, stockDisponible: 50 });
+            if (cantAceite > 0) carrito.push({ nombre: "Aceite de Oliva Virgen Extra", precio: 28.50, cantidad: cantAceite, esFragil: true, stockDisponible: 50 });
+
+            // 3. Enviamos la petición POST a nuestro servidor
+            try {
+                // Al estar en el mismo servidor, la ruta es directamente '/factura'
+                const respuesta = await fetch('/factura', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        cliente: { nombre: nombre, email: email },
+                        carrito: carrito
+                    })
+                });
+                const datos = await respuesta.json();
+                
+                // 4. Mostramos el ticket que nos devuelve el Backend en pantalla
+                const contenedorResultado = document.getElementById('resultado');
+                contenedorResultado.style.display = 'block'; // Lo hacemos visible
+
+                if (respuesta.ok) {
+                    contenedorResultado.textContent = datos.ticket;
+                } else {
+                    contenedorResultado.textContent = "❌ Operación denegada:\n" + datos.error;
+                }
+
+            } catch (error) {
+                alert("Error de conexión con el servidor. ¿Está Node.js encendido?");
+            }
+        });
+    </script>
+</body>
+</html>
